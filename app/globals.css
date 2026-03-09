@@ -3,16 +3,16 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-background: #fafafa;
+  --color-background: #f6f6f3;
   --color-foreground: #191919;
-  --color-surface-1: #f5f5f5;
-  --color-surface-2: #efefef;
-  --color-surface-3: #e5e5e5;
+  --color-surface-1: #edede8;
+  --color-surface-2: #dbdbd2;
+  --color-surface-3: #c8c8be;
   --color-accent: #f97316;
   --color-accent-dark: #ea580c;
-  --color-text-muted: rgba(25, 25, 25, 0.5);
-  --color-text-body: rgba(25, 25, 25, 0.85);
-  --color-border: rgba(25, 25, 25, 0.08);
+  --color-text-muted: color-mix(in srgb, #191919 50%, transparent);
+  --color-text-body: color-mix(in srgb, #191919 85%, transparent);
+  --color-border: color-mix(in srgb, #191919 8%, transparent);
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
 }
 
@@ -30,48 +30,24 @@ body {
 }
 
 ::selection {
-  background: var(--color-accent);
+  background: var(--color-foreground);
   color: white;
 }
 
-::-webkit-scrollbar {
-  width: 6px;
-}
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.15);
-  border-radius: 3px;
-}
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--color-surface-2); border-radius: 3px; }
 
-/* ===== GSAP-STYLE ANIMATIONS ===== */
+/* ===== ANIMATIONS ===== */
 
 @keyframes revealUp {
-  from {
-    opacity: 0;
-    transform: translateY(60px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes revealFade {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from { opacity: 0; transform: translateY(60px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes scaleIn {
-  from {
-    opacity: 0;
-    transform: scale(0.92);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 @keyframes marqueeScroll {
@@ -87,104 +63,132 @@ body {
 .reveal-up {
   animation: revealUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
-
 .reveal-up-d1 {
   animation: revealUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards;
   opacity: 0;
 }
-
 .reveal-up-d2 {
   animation: revealUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
   opacity: 0;
 }
-
 .reveal-up-d3 {
   animation: revealUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.35s forwards;
   opacity: 0;
 }
-
-.reveal-up-d4 {
-  animation: revealUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) 0.5s forwards;
-  opacity: 0;
-}
-
 .reveal-scale {
   animation: scaleIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s forwards;
   opacity: 0;
 }
-
 .float-soft {
   animation: floatSoft 6s ease-in-out infinite;
 }
 
-/* ===== NAV ISLAND (Planar style) ===== */
+/* ===== NAV ISLAND ===== */
 
 .nav-island {
   display: flex;
   align-items: center;
   gap: 2rem;
-  background: rgba(255, 255, 255, 0.9);
+  background: color-mix(in srgb, var(--color-background) 85%, transparent);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid var(--color-border);
-  border-radius: 100px;
-  padding: 8px 8px 8px 24px;
+  border-radius: 200px;
+  padding: 6px 6px 6px 24px;
   transition: box-shadow 0.3s ease;
 }
-
 .nav-island:hover {
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 24px color-mix(in srgb, #191919 6%, transparent);
 }
 
-/* ===== BUTTON (Planar style) ===== */
+/* ===== PLANAR BUTTON ===== */
 
-.btn-planar {
-  display: inline-flex;
-  align-items: center;
+.btn {
+  height: 48px;
+  padding: 0 24px;
   gap: 8px;
-  padding: 12px 24px;
+  border-radius: 200px;
   background: var(--color-foreground);
   color: white;
-  border-radius: 100px;
   font-size: 15px;
   font-weight: 500;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   overflow: hidden;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease;
+  transition: color 0.2s, background-color 0.2s;
   cursor: pointer;
   border: none;
 }
 
-.btn-planar:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
-}
-
-.btn-planar.small {
-  padding: 8px 20px;
-  font-size: 14px;
-}
-
-.btn-ghost {
+.btn .btn-label {
+  position: relative;
+  z-index: 1;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 12px 24px;
+}
+
+.btn .btn-hover-blob-wrap {
+  pointer-events: none;
+  width: 100%;
+  height: auto;
+  position: absolute;
+  top: 100%;
+  transition: top 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn .btn-hover-blob {
+  aspect-ratio: 1;
+  background-color: silver;
+  filter: blur(3px);
+  border-radius: 50%;
+  width: 100%;
+  height: auto;
+  position: relative;
+  top: 5px;
+}
+
+.btn:hover .btn-hover-blob-wrap {
+  top: -10%;
+}
+
+.btn.small {
+  height: 36px;
+  padding: 0 18px;
+  font-size: 14px;
+}
+
+.btn.inverted {
+  background: white;
+  color: var(--color-foreground);
+}
+.btn.inverted .btn-hover-blob {
+  background-color: var(--color-surface-1);
+}
+
+.btn-ghost {
+  height: 48px;
+  padding: 0 24px;
+  gap: 8px;
+  border-radius: 200px;
   background: transparent;
   color: var(--color-foreground);
-  border-radius: 100px;
   font-size: 15px;
   font-weight: 500;
   text-decoration: none;
-  border: 1px solid rgba(25, 25, 25, 0.12);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid color-mix(in srgb, #191919 12%, transparent);
   transition: all 0.3s ease;
   cursor: pointer;
 }
-
 .btn-ghost:hover {
-  background: rgba(25, 25, 25, 0.04);
-  border-color: rgba(25, 25, 25, 0.2);
+  background: color-mix(in srgb, #191919 4%, transparent);
+  border-color: color-mix(in srgb, #191919 20%, transparent);
 }
 
 /* ===== SECTION ===== */
@@ -192,12 +196,11 @@ body {
 .section {
   padding: 5rem 0;
 }
-
 .section.compact {
   padding: 3rem 0;
 }
 
-/* ===== HEADING STYLES (Planar) ===== */
+/* ===== HEADINGS ===== */
 
 .heading-display {
   font-size: clamp(3rem, 7vw, 5.5rem);
@@ -205,31 +208,27 @@ body {
   line-height: 1.1;
   letter-spacing: -0.03em;
 }
-
 .heading-muted {
   color: var(--color-text-muted);
 }
-
 .text-lead {
   font-size: 1.125rem;
   line-height: 1.5;
   color: var(--color-text-body);
 }
 
-/* ===== BENTO GRID ===== */
+/* ===== BENTO ===== */
 
 .bento-grid {
   display: grid;
-  gap: 1rem;
+  gap: 0.75rem;
 }
-
 .bento-card {
   background: var(--color-surface-1);
   border-radius: 20px;
   overflow: hidden;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 .bento-card:hover {
   transform: translateY(-4px);
 }
@@ -243,9 +242,8 @@ body {
   padding: 2rem;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
-
 .feature-box:hover {
-  box-shadow: 0 20px 60px -15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 60px -15px color-mix(in srgb, #191919 10%, transparent);
   transform: translateY(-4px);
 }
 
@@ -256,28 +254,26 @@ body {
   mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
   -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
 }
-
 .marquee-track {
   display: flex;
   gap: 4rem;
   animation: marqueeScroll 30s linear infinite;
   width: max-content;
 }
-
 .marquee-track:hover {
   animation-play-state: paused;
 }
 
-/* ===== TILE (Planar mini-card) ===== */
+/* ===== TILE ===== */
 
 .tile {
-  background: white;
+  background: var(--color-surface-1);
   border: 1px solid var(--color-border);
-  border-radius: 14px;
-  padding: 1rem 1.25rem;
+  border-radius: 10px;
+  padding: 0.5rem 0.75rem;
 }
 
-/* ===== INTRO TEXT (Planar large text block) ===== */
+/* ===== INTRO TEXT ===== */
 
 .intro-text {
   max-width: 56rem;
@@ -286,12 +282,11 @@ body {
   font-weight: 500;
   letter-spacing: -0.01em;
 }
-
 .intro-text .muted {
   color: var(--color-text-muted);
 }
 
-/* ===== STEP TIMELINE ===== */
+/* ===== STEP ===== */
 
 .step-number {
   width: 40px;
@@ -307,7 +302,7 @@ body {
   flex-shrink: 0;
 }
 
-/* ===== METRIC CARD ===== */
+/* ===== METRIC ===== */
 
 .metric-value {
   font-size: clamp(3rem, 5vw, 4.5rem);
@@ -316,7 +311,7 @@ body {
   letter-spacing: -0.03em;
 }
 
-/* ===== CTA SECTION ===== */
+/* ===== CTA ===== */
 
 .cta-section {
   background: var(--color-foreground);
@@ -326,15 +321,6 @@ body {
   text-align: center;
   position: relative;
   overflow: hidden;
-}
-
-.cta-section .btn-planar {
-  background: white;
-  color: var(--color-foreground);
-}
-
-.cta-section .btn-planar:hover {
-  background: var(--color-surface-1);
 }
 
 /* ===== ACCENT DOT ===== */
@@ -354,19 +340,25 @@ body {
   background: var(--color-border);
 }
 
+/* ===== BOXED ICON (Planar) ===== */
+
+.boxed-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  background: var(--color-surface-1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
 /* ===== RESPONSIVE ===== */
 
 @media (max-width: 768px) {
-  .section {
-    padding: 3rem 0;
-  }
-
-  .heading-display {
-    font-size: clamp(2.25rem, 8vw, 3.5rem);
-  }
-
-  .nav-island {
-    gap: 1rem;
-    padding: 6px 6px 6px 16px;
-  }
+  .section { padding: 3rem 0; }
+  .heading-display { font-size: clamp(2.25rem, 8vw, 3.5rem); }
+  .nav-island { gap: 1rem; padding: 4px 4px 4px 16px; }
+  .btn { height: 44px; }
+  .btn.small { height: 34px; }
 }
