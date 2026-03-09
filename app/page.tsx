@@ -371,10 +371,10 @@ export default function Home() {
                   Time saved
                 </div>
                 <div className="metric-value mt-2">15h</div>
-                <div className="text-sm opacity-50 mt-1">per week</div>
+                <div className="text-sm opacity-50 mt-1 font-bold">per week</div>
               </div>
-              <div className="bento-card bg-[var(--color-surface-1)] text-[var(--color-foreground)] p-6 flex-1 flex flex-col justify-between">
-                <div className="text-sm text-[var(--color-text-muted)] font-medium">
+              <div className="bento-card platforms-card bg-[var(--color-surface-1)] text-[var(--color-foreground)] p-6 flex-1 flex flex-col justify-between">
+                <div className="platforms-label text-sm font-medium">
                   Platforms
                 </div>
                 <div className="flex flex-wrap gap-2 mt-3">
@@ -624,14 +624,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="divider mb-8" />
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-4">
+            <div className="flex flex-col items-start gap-0.5">
               <a href="#" className="flex items-center gap-1">
                 <span className="text-xl font-extrabold text-[var(--color-accent)]">
                   &gt;
                 </span>
                 <span className="font-bold tracking-tight">job</span>
               </a>
-              <span className="text-xs text-[var(--color-text-muted)] italic">
+              <span className="text-xs text-[var(--color-text-muted)] italic pl-[1.1em]">
                 by europa
               </span>
             </div>
