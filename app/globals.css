@@ -29,6 +29,22 @@ body {
   overflow-x: hidden;
 }
 
+html[data-theme="dark"] {
+  --color-background: #191919;
+  --color-foreground: #f6f6f3;
+  --color-surface-1: #242424;
+  --color-surface-2: #2e2e2e;
+  --color-surface-3: #3a3a3a;
+  --color-text-muted: color-mix(in srgb, #f6f6f3 55%, transparent);
+  --color-text-body: color-mix(in srgb, #f6f6f3 86%, transparent);
+  --color-border: color-mix(in srgb, #f6f6f3 12%, transparent);
+  color-scheme: dark;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+}
+
 ::selection {
   background: var(--color-foreground);
   color: white;
@@ -225,6 +241,7 @@ body {
 }
 .bento-card {
   background: var(--color-surface-1);
+  color: var(--color-foreground);
   border-radius: 20px;
   overflow: hidden;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -237,10 +254,14 @@ body {
 
 .feature-box {
   background: white;
+  color: var(--color-foreground);
   border: 1px solid var(--color-border);
   border-radius: 20px;
   padding: 2rem;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+html[data-theme="dark"] .feature-box {
+  background: #212121;
 }
 .feature-box:hover {
   box-shadow: 0 20px 60px -15px color-mix(in srgb, #191919 10%, transparent);
@@ -351,6 +372,68 @@ body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+}
+
+/* ===== PHOTO BLOCK ===== */
+
+.photo-card {
+  position: relative;
+  min-height: 300px;
+}
+
+.photo-media {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.photo-overlay-card {
+  position: absolute;
+  left: 2rem;
+  top: 2rem;
+  background: color-mix(in srgb, white 88%, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  padding: 1rem;
+  width: 220px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+html[data-theme="dark"] .photo-overlay-card {
+  background: color-mix(in srgb, #191919 80%, transparent);
+}
+
+.photo-dots-grid {
+  margin-top: 1rem;
+  width: 100%;
+  height: 62px;
+  border-radius: 10px;
+  background-image:
+    radial-gradient(circle at 10% 20%, #1f1f1f 5px, transparent 6px),
+    radial-gradient(circle at 30% 70%, #1f1f1f 5px, transparent 6px),
+    radial-gradient(circle at 55% 42%, #1f1f1f 5px, transparent 6px),
+    radial-gradient(circle at 80% 65%, #1f1f1f 5px, transparent 6px),
+    radial-gradient(circle at 85% 25%, #1f1f1f 5px, transparent 6px),
+    repeating-linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--color-foreground) 9%, transparent) 0 16px,
+      transparent 16px 22px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      color-mix(in srgb, var(--color-foreground) 9%, transparent) 0 12px,
+      transparent 12px 18px
+    );
+}
+
+.photo-overlay-metric {
+  position: absolute;
+  top: 1.5rem;
+  left: 1.5rem;
+  color: white;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
 }
 
 /* ===== RESPONSIVE ===== */

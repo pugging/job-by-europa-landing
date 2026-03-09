@@ -1,6 +1,6 @@
 "use client";
 
-import { type ReactNode } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 
 function PlanarButton({
   href,
@@ -38,6 +38,64 @@ const Arrow = () => (
 );
 
 export default function Home() {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [themeReady, setThemeReady] = useState(false);
+
+  useEffect(() => {
+    const storedTheme = window.localStorage.getItem("job-theme");
+    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const initialTheme =
+      storedTheme === "dark" || storedTheme === "light"
+        ? storedTheme
+        : prefersDark
+          ? "dark"
+          : "light";
+
+    document.documentElement.setAttribute("data-theme", initialTheme);
+    setTheme(initialTheme);
+    setThemeReady(true);
+  }, []);
+
+  useEffect(() => {
+    if (!themeReady) return;
+    document.documentElement.setAttribute("data-theme", theme);
+    window.localStorage.setItem("job-theme", theme);
+  }, [theme, themeReady]);
+
+  useEffect(() => {
+    let rafId = 0;
+    let lenis: { raf: (time: number) => void; destroy: () => void } | null = null;
+
+    const setupLenis = async () => {
+      const { default: Lenis } = await import("lenis");
+      lenis = new Lenis({
+        duration: 1.2,
+        smoothWheel: true,
+        wheelMultiplier: 0.95,
+      });
+
+      const raf = (time: number) => {
+        lenis?.raf(time);
+        rafId = window.requestAnimationFrame(raf);
+      };
+
+      rafId = window.requestAnimationFrame(raf);
+    };
+
+    setupLenis();
+
+    return () => {
+      if (rafId) {
+        window.cancelAnimationFrame(rafId);
+      }
+      lenis?.destroy();
+    };
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
+
   return (
     <div className="min-h-screen">
       {/* ===== NAV ===== */}
@@ -55,6 +113,22 @@ export default function Home() {
                 </a>
               ))}
             </div>
+            <button
+              type="button"
+              className="btn-ghost h-9 w-9 p-0 rounded-full"
+              aria-label="Toggle color theme"
+              onClick={toggleTheme}
+            >
+              {theme === "dark" ? (
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.2m0 13.6V21m9-9h-2.2M5.2 12H3m14.164 6.364l-1.556-1.556M8.392 8.392L6.836 6.836m10.328 0l-1.556 1.556M8.392 15.608l-1.556 1.556M15.5 12a3.5 3.5 0 11-7 0 3.5 3.5 0 017 0z" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z" />
+                </svg>
+              )}
+            </button>
             <PlanarButton href="#download" small>Get Extension</PlanarButton>
           </nav>
         </div>
@@ -83,17 +157,51 @@ export default function Home() {
               </div>
             </div>
             <div className="flex flex-col gap-3">
-              <div className="bento-card bg-[var(--color-foreground)] text-white p-6 flex-1 flex flex-col justify-between">
+              <div className="bento-card bg-[#191919] text-white p-6 flex-1 flex flex-col justify-between">
                 <div className="text-sm opacity-50 font-medium">Time saved</div>
                 <div className="metric-value mt-2">15h</div>
                 <div className="text-sm opacity-50 mt-1">per week</div>
               </div>
-              <div className="bento-card bg-[var(--color-surface-1)] p-6 flex-1 flex flex-col justify-between">
+              <div className="bento-card bg-[var(--color-surface-1)] text-[var(--color-foreground)] p-6 flex-1 flex flex-col justify-between">
                 <div className="text-sm text-[var(--color-text-muted)] font-medium">Platforms</div>
                 <div className="flex flex-wrap gap-2 mt-3">
                   {["pracuj.pl", "LinkedIn", "NoFluff", "Indeed"].map((p) => (
                     <span key={p} className="tile text-xs font-medium">{p}</span>
                   ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===== PHOTO STRIP (Planar style) ===== */}
+      <section className="section compact">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="bento-card photo-card">
+              <img
+                src="https://cdn.prod.website-files.com/6983c6a62866a32213dee10a/69928a4c03fc8f95db7010ae_art_13.webp"
+                alt="Abstract premium visual motif in Planar style"
+                className="photo-media"
+              />
+              <div className="photo-overlay-card">
+                <div className="text-xs text-[var(--color-text-muted)]">Activity</div>
+                <div className="font-semibold tracking-tight">December</div>
+                <div className="photo-dots-grid" />
+              </div>
+            </div>
+            <div className="bento-card photo-card">
+              <img
+                src="https://cdn.prod.website-files.com/6983c6a62866a32213dee10a/6983cc514cc7c2e4131874cb_landscape-17.webp"
+                alt="Desk setup in warm cinematic lighting"
+                className="photo-media"
+              />
+              <div className="photo-overlay-metric">
+                <div className="text-sm opacity-80">Revenue</div>
+                <div className="text-5xl font-semibold tracking-tight mt-1">76% ↑</div>
+                <div className="text-sm opacity-80 mt-2 max-w-[260px]">
+                  Year-on-year improvement with AI-assisted job search.
                 </div>
               </div>
             </div>
@@ -190,7 +298,7 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             {metrics.map((m, i) => (
-              <div key={i} className={`bento-card p-8 md:p-10 text-center ${m.dark ? "bg-[var(--color-foreground)] text-white" : "bg-[var(--color-surface-1)]"}`}>
+              <div key={i} className={`bento-card p-8 md:p-10 text-center ${m.dark ? "bg-[#191919] text-white" : "bg-[var(--color-surface-1)] text-[var(--color-foreground)]"}`}>
                 <div className="metric-value">{m.value}</div>
                 <div className={`text-sm mt-2 font-medium ${m.dark ? "opacity-50" : "text-[var(--color-text-muted)]"}`}>{m.label}</div>
               </div>
@@ -269,7 +377,7 @@ const features = [
     desc: "Data goes to your webhook only. No tracking, no analytics, no third parties.",
   },
   {
-    icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}><path strokeLinecap="round" strokeLinejoin="round" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064" /></svg>,
+    icon: <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}><path strokeLinecap="round" strokeLinejoin="round" d="M12 22s7-4.6 7-10a7 7 0 10-14 0c0 5.4 7 10 7 10z" /><path strokeLinecap="round" strokeLinejoin="round" d="M9 10.5h6M9 13h6" /><path strokeLinecap="round" strokeLinejoin="round" d="M9 8h6" /></svg>,
     title: "Made for Poland",
     desc: "Optimized for Pracuj.pl, NoFluffJobs, JustJoin.it and the Polish market.",
   },
