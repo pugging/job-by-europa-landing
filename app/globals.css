@@ -14,6 +14,7 @@
   --color-text-body: color-mix(in srgb, #191919 85%, transparent);
   --color-border: color-mix(in srgb, #191919 8%, transparent);
   --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --fx-intensity: 1;
 }
 
 html {
@@ -29,6 +30,32 @@ body {
   overflow-x: hidden;
 }
 
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -2;
+  background:
+    radial-gradient(60% 60% at 8% -10%, color-mix(in srgb, var(--color-accent) calc(12% * var(--fx-intensity)), transparent), transparent),
+    radial-gradient(46% 44% at 92% 4%, color-mix(in srgb, #7c4d12 calc(9% * var(--fx-intensity)), transparent), transparent),
+    linear-gradient(180deg, var(--color-background), var(--color-background));
+}
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  opacity: calc(0.04 * var(--fx-intensity));
+  background-image: radial-gradient(circle, currentColor 0.45px, transparent 0.5px);
+  background-size: 4px 4px;
+  color: color-mix(in srgb, var(--color-foreground) 55%, transparent);
+}
+
+/* ===== DARK THEME ===== */
+
 html[data-theme="dark"] {
   --color-background: #191919;
   --color-foreground: #f6f6f3;
@@ -39,6 +66,17 @@ html[data-theme="dark"] {
   --color-text-body: color-mix(in srgb, #f6f6f3 86%, transparent);
   --color-border: color-mix(in srgb, #f6f6f3 12%, transparent);
   color-scheme: dark;
+}
+
+html[data-theme="dark"] body::before {
+  background:
+    radial-gradient(60% 60% at 8% -10%, color-mix(in srgb, var(--color-accent) calc(18% * var(--fx-intensity)), transparent), transparent),
+    radial-gradient(46% 44% at 92% 4%, color-mix(in srgb, #b56a1b calc(11% * var(--fx-intensity)), transparent), transparent),
+    linear-gradient(180deg, #171717, #191919 45%, #1b1b1b);
+}
+
+html[data-theme="dark"] body::after {
+  opacity: calc(0.07 * var(--fx-intensity));
 }
 
 html[data-theme="light"] {
@@ -106,8 +144,8 @@ html[data-theme="light"] {
   align-items: center;
   gap: 2rem;
   background: color-mix(in srgb, var(--color-background) 85%, transparent);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(26px);
+  -webkit-backdrop-filter: blur(26px);
   border: 1px solid var(--color-border);
   border-radius: 200px;
   padding: 6px 6px 6px 24px;
@@ -115,6 +153,58 @@ html[data-theme="light"] {
 }
 .nav-island:hover {
   box-shadow: 0 4px 24px color-mix(in srgb, #191919 6%, transparent);
+}
+
+/* ===== PLANAR THEME TOGGLE ===== */
+
+.color-scheme-toggle {
+  background-color: var(--color-surface-1);
+  cursor: pointer;
+  border-radius: 200px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.color-scheme-item {
+  z-index: 1;
+  padding: 7px 10px;
+  border-radius: 200px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.color-scheme-indicator {
+  background-color: var(--color-surface-3);
+  border-radius: 200px;
+  width: 50%;
+  height: 100%;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.color-scheme-indicator[data-active="dark"] {
+  transform: translateX(100%);
+}
+
+.color-scheme-icon {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-foreground);
+}
+
+.color-scheme-icon svg {
+  width: 100%;
+  height: 100%;
 }
 
 /* ===== PLANAR BUTTON ===== */
@@ -159,7 +249,7 @@ html[data-theme="light"] {
 .btn .btn-hover-blob {
   aspect-ratio: 1;
   background-color: silver;
-  filter: blur(3px);
+  filter: blur(4px);
   border-radius: 50%;
   width: 100%;
   height: auto;
@@ -168,7 +258,7 @@ html[data-theme="light"] {
 }
 
 .btn:hover .btn-hover-blob-wrap {
-  top: -10%;
+  top: -13%;
 }
 
 .btn.small {
@@ -397,8 +487,8 @@ html[data-theme="dark"] .feature-box {
   border-radius: 18px;
   padding: 1rem;
   width: 220px;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 html[data-theme="dark"] .photo-overlay-card {
@@ -436,12 +526,32 @@ html[data-theme="dark"] .photo-overlay-card {
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
 }
 
+/* ===== GSAP MOTION STATES ===== */
+
+html.motion-ready [data-reveal] {
+  opacity: 0;
+  transform: translateY(42px);
+  will-change: transform, opacity;
+}
+
+html.motion-ready [data-parallax] {
+  will-change: transform;
+}
+
+/* stagger children inside [data-stagger] */
+html.motion-ready [data-stagger] > * {
+  opacity: 0;
+  transform: translateY(32px);
+  will-change: transform, opacity;
+}
+
 /* ===== RESPONSIVE ===== */
 
 @media (max-width: 768px) {
   .section { padding: 3rem 0; }
   .heading-display { font-size: clamp(2.25rem, 8vw, 3.5rem); }
-  .nav-island { gap: 1rem; padding: 4px 4px 4px 16px; }
+  .nav-island { gap: 0.75rem; padding: 4px 4px 4px 16px; }
   .btn { height: 44px; }
   .btn.small { height: 34px; }
+  .color-scheme-item { padding: 6px 8px; }
 }

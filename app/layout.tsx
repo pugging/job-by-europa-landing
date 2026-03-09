@@ -2,13 +2,27 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "<job by europa — Capture Jobs Instantly",
-  description: "A Chrome extension that extracts job listings and sends them to your n8n workflow for automated analysis. Built for students hunting their dream job.",
-  keywords: ["job search", "chrome extension", "n8n", "automation", "poland", "student jobs", "<job", "europa"],
+  title: ">job by europa",
+  description:
+    "A Chrome extension that extracts job listings and sends them to your n8n workflow for automated analysis. Built for students hunting their dream job.",
+  keywords: [
+    "job search",
+    "chrome extension",
+    "n8n",
+    "automation",
+    "poland",
+    "student jobs",
+    ">job",
+    "europa",
+  ],
   authors: [{ name: "europa" }],
+  icons: {
+    icon: "/favicon.svg",
+  },
   openGraph: {
-    title: "<job by europa — Capture Jobs Instantly",
-    description: "Extract job listings and automate your job search with n8n integration.",
+    title: ">job by europa",
+    description:
+      "Extract job listings and automate your job search with n8n integration.",
     type: "website",
   },
 };
@@ -19,18 +33,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+          crossOrigin="anonymous"
+        />
         <link
           href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
           rel="stylesheet"
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("job-theme");if(t==="dark"||(!t&&matchMedia("(prefers-color-scheme:dark)").matches)){document.documentElement.setAttribute("data-theme","dark")}else{document.documentElement.setAttribute("data-theme","light")}}catch(e){}})()`,
+          }}
+        />
       </head>
-      <body className="antialiased">
-        {children}
-      </body>
+      <body className="antialiased">{children}</body>
     </html>
   );
 }
