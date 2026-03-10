@@ -306,13 +306,12 @@ const Home = () => {
               </div>
               <div className="bento-card bg-[#191919] text-white p-6 flex-1 flex flex-col justify-between group overflow-hidden relative">
                 <div className="absolute -top-12 -right-12 w-48 h-48 bg-[var(--color-accent)]/10 blur-3xl rounded-full transition-all duration-700 group-hover:bg-[var(--color-accent)]/20 group-hover:scale-125" />
-                <div className="platforms-label text-sm font-medium z-10 relative opacity-50">
+                <div className="platforms-label text-sm font-medium z-10 relative opacity-40">
                   Supported Platforms
                 </div>
                 <div className="flex flex-wrap gap-2 mt-4 z-10 relative">
                   {["pracuj.pl", "LinkedIn", "NoFluff", "Indeed"].map((p) => (
-                    <span key={p} className="text-xs font-medium flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10 shadow-sm backdrop-blur-md transition-colors hover:bg-white/10 hover:border-white/20">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] shadow-[0_0_8px_var(--color-accent)]" />
+                    <span key={p} className="text-sm font-medium px-4 py-2 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md transition-all hover:bg-white/10 hover:border-white/20 hover:scale-[1.02]">
                       {p}
                     </span>
                   ))}
@@ -353,7 +352,7 @@ const Home = () => {
                 className="photo-media"
               />
               <div className="photo-overlay-metric">
-                <div className="text-sm opacity-80">Revenue</div>
+                <div className="text-sm opacity-80">Interview rate</div>
                 <div className="text-5xl font-semibold tracking-tight mt-1">
                   76% ↑
                 </div>
