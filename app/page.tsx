@@ -60,56 +60,12 @@ const Arrow = () => (
   </svg>
 );
 
-/* Planar-style sun icon */
-const SunIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-    <path
-      fill="currentColor"
-      d="M 11 0 L 11 3 L 13 3 L 13 0 L 11 0 z M 4.2226562 2.8085938 L 2.8085938 4.2226562 L 4.9296875 6.34375 L 6.34375 4.9296875 L 4.2226562 2.8085938 z M 19.777344 2.8085938 L 17.65625 4.9296875 L 19.070312 6.34375 L 21.191406 4.2226562 L 19.777344 2.8085938 z M 12 5 A 7 7 0 0 0 5 12 A 7 7 0 0 0 12 19 A 7 7 0 0 0 19 12 A 7 7 0 0 0 12 5 z M 0 11 L 0 13 L 3 13 L 3 11 L 0 11 z M 21 11 L 21 13 L 24 13 L 24 11 L 21 11 z M 4.9296875 17.65625 L 2.8085938 19.777344 L 4.2226562 21.191406 L 6.34375 19.070312 L 4.9296875 17.65625 z M 19.070312 17.65625 L 17.65625 19.070312 L 19.777344 21.191406 L 21.191406 19.777344 L 19.070312 17.65625 z M 11 21 L 11 24 L 13 24 L 13 21 L 11 21 z"
-    />
-  </svg>
-);
 
-/* Planar-style moon icon */
-const MoonIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path
-      d="M13.019 21.998C9.29 21.998 5.706 19.905 3.987 16.325C2.831 13.917 2.682 11.203 3.568 8.683C4.454 6.163 6.268 4.139 8.676 2.983C10.219 2.242 11.937 1.91 13.652 2.023L14.034 3.024C10.611 4.423 9.031 9.71 10.574 12.925C11.967 15.826 15.984 18.924 20.585 16.937L21.192 17.732C20.209 19.139 18.873 20.274 17.331 21.014C15.939 21.681 14.467 21.997 13.019 21.998Z"
-      fill="currentColor"
-    />
-  </svg>
-);
 
 /* ===== MAIN PAGE ===== */
 
-export default function Home() {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [themeReady, setThemeReady] = useState(false);
+const Home = () => {
   const heroRef = useRef<HTMLDivElement>(null);
-
-  /* --- Theme init --- */
-  useEffect(() => {
-    const stored = window.localStorage.getItem("job-theme");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    ).matches;
-    const initial =
-      stored === "dark" || stored === "light"
-        ? stored
-        : prefersDark
-          ? "dark"
-          : "light";
-    document.documentElement.setAttribute("data-theme", initial);
-    setTheme(initial);
-    setThemeReady(true);
-  }, []);
-
-  /* --- Theme persistence --- */
-  useEffect(() => {
-    if (!themeReady) return;
-    document.documentElement.setAttribute("data-theme", theme);
-    window.localStorage.setItem("job-theme", theme);
-  }, [theme, themeReady]);
 
   /* --- Lenis smooth scroll --- */
   useEffect(() => {
@@ -267,9 +223,6 @@ export default function Home() {
     };
   }, []);
 
-  const toggleTheme = () =>
-    setTheme((p) => (p === "light" ? "dark" : "light"));
-
   return (
     <div className="min-h-screen">
       {/* ===== NAV ===== */}
@@ -295,32 +248,7 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Planar-style theme toggle */}
-            <div
-              className="color-scheme-toggle"
-              onClick={toggleTheme}
-              role="button"
-              tabIndex={0}
-              aria-label="Toggle color theme"
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") toggleTheme();
-              }}
-            >
-              <div className="color-scheme-item light-toggle">
-                <div className="color-scheme-icon">
-                  <SunIcon />
-                </div>
-              </div>
-              <div className="color-scheme-item dark-toggle">
-                <div className="color-scheme-icon">
-                  <MoonIcon />
-                </div>
-              </div>
-              <div
-                className="color-scheme-indicator"
-                data-active={theme}
-              />
-            </div>
+
 
             <PlanarButton href="#download" small>
               Get Extension
@@ -337,13 +265,16 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="text-center max-w-4xl mx-auto">
-            <h1 className="heading-display reveal-up">Capture jobs</h1>
-            <h2 className="heading-display heading-muted reveal-up-d1">
-              Automate the rest
+            <h1 className="heading-display reveal-up">Job hunting,</h1>
+            <h2 
+              className="heading-display reveal-up-d1"
+              style={{ fontFamily: "var(--font-serif)", color: "var(--color-accent)", fontStyle: "italic", paddingRight: "0.2em" }}
+            >
+              on autopilot.
             </h2>
             <p className="text-lead max-w-2xl mx-auto mt-6 reveal-up-d2">
-              A Chrome extension that extracts job listings from any website and
-              sends them to your AI workflow for instant, personalized analysis.
+              A Chrome extension that extracts local job listings from any website and
+              sends them to your AI workflow for instant, personalized processing.
             </p>
             <div className="flex items-center justify-center gap-3 mt-10 reveal-up-d3">
               <PlanarButton href="#download">
@@ -373,13 +304,15 @@ export default function Home() {
                 <div className="metric-value mt-2">15h</div>
                 <div className="text-sm opacity-50 mt-1 font-bold">per week</div>
               </div>
-              <div className="bento-card platforms-card bg-[var(--color-surface-1)] text-[var(--color-foreground)] p-6 flex-1 flex flex-col justify-between">
-                <div className="platforms-label text-sm font-medium">
-                  Platforms
+              <div className="bento-card bg-[#191919] text-white p-6 flex-1 flex flex-col justify-between group overflow-hidden relative">
+                <div className="absolute -top-12 -right-12 w-48 h-48 bg-[var(--color-accent)]/10 blur-3xl rounded-full transition-all duration-700 group-hover:bg-[var(--color-accent)]/20 group-hover:scale-125" />
+                <div className="platforms-label text-sm font-medium z-10 relative opacity-50">
+                  Supported Platforms
                 </div>
-                <div className="flex flex-wrap gap-2 mt-3">
+                <div className="flex flex-wrap gap-2 mt-4 z-10 relative">
                   {["pracuj.pl", "LinkedIn", "NoFluff", "Indeed"].map((p) => (
-                    <span key={p} className="tile text-xs font-medium">
+                    <span key={p} className="text-xs font-medium flex items-center gap-2 px-3 py-2 rounded-xl bg-white/5 border border-white/10 shadow-sm backdrop-blur-md transition-colors hover:bg-white/10 hover:border-white/20">
+                      <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-accent)] shadow-[0_0_8px_var(--color-accent)]" />
                       {p}
                     </span>
                   ))}
@@ -590,10 +523,7 @@ export default function Home() {
               <br />
               dream job?
             </h2>
-            <p
-              className="text-lead mt-4 opacity-60 max-w-lg mx-auto"
-              style={{ color: "white" }}
-            >
+            <p className="text-lead mt-4 opacity-75 max-w-lg mx-auto">
               Download the extension, connect your n8n, and start automating
               your job search. Built by a student, for students.
             </p>
@@ -861,3 +791,5 @@ function HeroMockup() {
     </div>
   );
 }
+
+export default Home;
